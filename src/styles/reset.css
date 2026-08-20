@@ -1,0 +1,45 @@
+/*
+ * MODERN RESET
+ * Levels out browser defaults so our tokens are the only thing deciding layout.
+ */
+
+/* Border-box everywhere: padding no longer inflates an element's width. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Kill default margins - spacing is owned by flex `gap`, never by margins. */
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-block-size: 100dvh; /* dvh handles mobile browser chrome correctly */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Form controls do not inherit fonts by default. Make them. */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Nicer line breaking for free */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
