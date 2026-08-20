@@ -1,8 +1,15 @@
 
 .page {
   display: flex;
-  justify-content: center; 
-  padding-block: var(--space-12); 
+  justify-content: center;
+
+  /*
+   * clamp(min, preferred, max) scales the gutter with the viewport:
+   * 16px on a phone, growing to 64px on desktop, with no media query.
+   * Matches the reference layout's 64px sides and 112px top.
+   */
+  padding-inline: clamp(var(--space-4), 5vw, var(--space-16));
+  padding-block: clamp(var(--space-8), 9vw, var(--space-28)) var(--space-12);
 }
 
 .card {
