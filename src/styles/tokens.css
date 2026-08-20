@@ -1,0 +1,42 @@
+/*
+ * DESIGN TOKENS
+ * Single source of truth for every value in the UI.
+ * No other file should contain a raw hex code or pixel value.
+ *
+ * Rule: a token only exists if a CSS rule uses it directly.
+ * We add more as each part of the form gets built.
+ */
+:root {
+  /* ---------- Colour ---------- */
+  --color-page: #e4effc;
+  --color-surface: #ffffff;
+  --color-text: #1a365d;
+  --color-text-muted: #4a5568;
+  --color-heading: #124d8f;
+
+  /* ---------- Typography ---------- */
+  --font-sans: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+
+  --text-xs: 0.8125rem; /* 13px */
+  --text-base: 1rem; /* 16px */
+
+  --weight-bold: 700;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.6;
+  --tracking-wide: 0.03em;
+
+  /* ---------- Spacing (4px scale) ---------- */
+  --space-4: 1rem; /* 16px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-12: 3rem; /* 48px */
+
+  /* ---------- Layout ---------- */
+  --card-max-inline-size: 50rem; /* 800px - where the card stops growing */
+
+  /* ---------- Radius & elevation ---------- */
+  --radius-md: 12px;
+  --shadow-card: 0 2px 8px rgb(0 0 0 / 0.1);
+}
