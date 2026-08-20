@@ -1,19 +1,10 @@
-/*
- * PAGE SHELL
- * Flex centring: one rule horizontally centres whatever child sits inside.
- */
+
 .page {
   display: flex;
-  justify-content: center; /* centre along the main (horizontal) axis */
-  /* padding-inline: var(--space-4); */
+  justify-content: center; 
   padding-block: var(--space-12); 
 }
 
-/*
- * REGISTRATION CARD
- * Naming follows BEM: .block, .block__element, .block--modifier.
- * Predictable names mean no specificity wars and no `!important`.
- */
 .card {
   inline-size: min(100%, var(--card-max-inline-size));
   display: flex;
