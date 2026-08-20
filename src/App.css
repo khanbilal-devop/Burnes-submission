@@ -41,5 +41,5 @@
 }
 
 .card__text {
-  color: var(--color-text-muted);
+  color: var(--color-body);
 }
