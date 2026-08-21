@@ -81,7 +81,7 @@ export const buildRegistrationPayload = (
   wantsNewsletter: boolean,
   consentedAt: string = new Date().toISOString(),
 ): RegistrationPayload => ({
-  email: values.email.trim(),
+  email: values.email.trim().toLowerCase(),
   first_name: values.firstName.trim(),
   last_name: values.lastName.trim(),
   country: values.country,
