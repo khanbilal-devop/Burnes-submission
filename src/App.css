@@ -33,13 +33,76 @@
   color: var(--color-heading);
 }
 
-/* Inner stack: same flex+gap pattern */
-.card__body {
+
+
+.form-layout {
   display: flex;
   flex-direction: column;
+  gap: var(--space-6);
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap; 
   gap: var(--space-4);
 }
 
-.card__text {
-  color: var(--color-body);
+/*
+ * Default field: grow to share the row equally.
+ * One in a row  -> 100%.  Two in a row -> 50% each.
+ * The flex-basis doubles as the wrap threshold: below 14rem a field drops
+ * onto its own line rather than getting crushed.
+ */
+.form-row > .form-field {
+  flex: 1 1 var(--field-min-inline-size);
+}
+
+/*
+ * Modifier: take exactly half the row and leave the rest empty.
+ * Subtracting half the gap makes it line up with a field from a two-column
+ * row - 360px inside the 736px card, matching the reference exactly.
+ */
+.form-row > .form-field--half {
+  flex: 0 1 calc(50% - var(--space-4) / 2);
+}
+
+/*
+ * Below 36rem there is no room for a half-width field, so it takes the whole
+ * row. This is the one spot a query is genuinely needed: flex on its own
+ * cannot express "half on desktop, full on mobile" for a lone item, because
+ * the item must not grow when it does have a neighbour.
+ */
+@media (width < 36rem) {
+  .form-row > .form-field--half {
+    flex-basis: 100%;
+  }
+}
+
+/*
+ * SECTION DIVIDER
+ * Lives outside .form-layout, as a sibling. The reference draws this as a
+ * border-top on the following section; an <hr> is the same line with
+ * clearer meaning.
+ * .card's 24px gap + 8px margin here = the reference's 32px on each side.
+ */
+.card__divider {
+  border: 0;
+  border-block-start: 1px solid var(--color-border);
+  margin-block: var(--space-2);
+}
+
+/*
+ * TEMPORARY SCAFFOLD
+ * Stands in for a real label + control so the layout is visible.
+ * Delete this rule once actual field components land.
+ */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: var(--field-block-size);
+  border: 1px dashed var(--color-heading);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: var(--color-heading);
 }

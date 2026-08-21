@@ -13,6 +13,7 @@
   --color-text: #1a365d;
   --color-body: #1a1a1a; 
   --color-heading: #124d8f;
+  --color-border: #e2e8f0; /* field borders + section dividers */
 
   /* ---------- Typography ---------- */
   --font-sans: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -28,6 +29,7 @@
   --tracking-wide: 0.03em;
 
   /* ---------- Spacing (4px scale) ---------- */
+  --space-2: 0.5rem; /* 8px */
   --space-4: 1rem; /* 16px */
   --space-6: 1.5rem; /* 24px */
   --space-8: 2rem; /* 32px */
@@ -38,7 +40,13 @@
   /* ---------- Layout ---------- */
   --card-max-inline-size: 50rem; /* 800px - where the card stops growing */
 
+  /* A field's natural height, and the width below which it wraps onto
+   * its own line instead of being squeezed. */
+  --field-block-size: 3rem; /* 48px */
+  --field-min-inline-size: 14rem; /* 224px */
+
   /* ---------- Radius & elevation ---------- */
+  --radius-sm: 6px;
   --radius-md: 12px;
   --shadow-card: 0 2px 8px rgb(0 0 0 / 0.1);
 }
