@@ -15,4 +15,6 @@ export type RegistrationFormValues = {
   /* Shown only when country is 'Outside the United States'. */
   nonUsCountry: string
   governmentAffiliation: string
+  /* Shown only when governmentAffiliation is one of the "Yes" answers. */
+  governmentLevel: string
 }

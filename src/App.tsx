@@ -4,6 +4,7 @@ import type { FieldChangeEvent } from './components/FormField/FormField.types'
 import type { RegistrationFormValues } from './App.types'
 import {
   COUNTRY_OPTIONS,
+  GOVERNMENT_LEVEL_OPTIONS,
   GOVERNMENT_OPTIONS,
   US_STATE_OPTIONS,
 } from './constants/formOptions'
@@ -17,14 +18,20 @@ const INITIAL_VALUES: RegistrationFormValues = {
   state: '',
   nonUsCountry: '',
   governmentAffiliation: '',
+  governmentLevel: '',
 }
 
-/* Country values that decide which follow-up field appears. */
 const UNITED_STATES = 'United States'
 const OUTSIDE_UNITED_STATES = 'Outside the United States'
+const NO_GOVERNMENT_AFFILIATION =
+  'No, I do not work for or support a government or government-affiliated organization'
 
 const App = () => {
-  const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES)
+  const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
+
+  const asksGovernmentLevel =
+    values.governmentAffiliation !== '' &&
+    values.governmentAffiliation !== NO_GOVERNMENT_AFFILIATION
 
   /*
    * One handler for every field. Each control carries its own `name`, which
@@ -41,6 +48,8 @@ const App = () => {
   const clearField = useCallback((name: string) => {
     setValues((previous) => ({ ...previous, [name]: '' }))
   }, [])
+
+
 
   return (
     <main className="page">
@@ -146,6 +155,22 @@ const App = () => {
               onChange={handleChange}
               required
             />
+
+            {asksGovernmentLevel && (
+              <FormField
+                as="select"
+                span="half"
+                id="government-level"
+                name="governmentLevel"
+                label="If a government employee or consultant: What level of government?"
+                placeholder="Select"
+                options={GOVERNMENT_LEVEL_OPTIONS}
+                value={values.governmentLevel}
+                onChange={handleChange}
+                onUnmount={clearField}
+                required
+              />
+            )}
           </div>
         </div>
 

@@ -43,3 +43,21 @@ export const US_STATE_OPTIONS: Option[] = US_STATE_CODES.map((code) => ({
   value: code,
   label: code,
 }))
+
+/*
+ * Shown only when the government-affiliation answer is one of the "Yes"
+ * options. Values match their labels, as elsewhere in this form.
+ */
+const GOVERNMENT_LEVELS = [
+  'International or Intergovernmental Organization (e.g. UN, OECD, EU)',
+  'National or Federal Level',
+  'State or Provincial level',
+  'Tribal Government',
+  'County or equivalent level',
+  'Municipal, City, or Local level',
+  'Other level not listed here',
+]
+
+export const GOVERNMENT_LEVEL_OPTIONS: Option[] = GOVERNMENT_LEVELS.map(
+  (level) => ({ value: level, label: level }),
+)
