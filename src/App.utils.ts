@@ -23,8 +23,15 @@ export const INITIAL_VALUES: RegistrationFormValues = {
 /* Treats whitespace-only input as empty, so " " does not pass as a name. */
 export const isBlank = (value: string) => value.trim().length === 0
 
-/* Deliberately loose: something@something.tld, no attempt to police TLDs. */
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+/*
+ * Dot-free chunks joined by single dots on each side of the @, so a trailing
+ * dot or an empty label like x..com cannot pass.
+ */
+const EMAIL_PATTERN = /^[^\s@.]+(\.[^\s@.]+)*@[^\s@.]+(\.[^\s@.]+)+$/
+
+/* Letters, spaces and name punctuation only - no digits. Both apostrophe forms,
+ * since phones substitute the curly one. */
+const COUNTRY_NAME_PATTERN = /^[\p{L}\s'’.-]+$/u
 
 /*
  * The government-level question only applies to the three "Yes" answers.
@@ -67,6 +74,14 @@ export const getValidationError = (
   /* State only exists while the country is the US. */
   if (values.country === UNITED_STATES && isBlank(values.state)) {
     return 'State/Province is required.'
+  }
+
+  if (
+    values.country === OUTSIDE_UNITED_STATES &&
+    !isBlank(values.nonUsCountry) &&
+    !COUNTRY_NAME_PATTERN.test(values.nonUsCountry.trim())
+  ) {
+    return 'Please enter a country name without numbers or symbols.'
   }
 
   if (isBlank(values.governmentAffiliation)) {
