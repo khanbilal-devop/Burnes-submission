@@ -24,3 +24,8 @@ export type RegistrationFormValues = {
   /* Shown only when governmentAffiliation is one of the "Yes" answers. */
   governmentLevel: string
 }
+
+
+export type RegistrationPayload = {
+  email: string
+}

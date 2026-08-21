@@ -15,6 +15,7 @@ import {
 import { EVENT_SERIES } from './constants/eventSeries'
 import {
   INITIAL_VALUES,
+  buildRegistrationPayload,
   getValidationError,
   needsGovernmentLevel,
   toggleInList,
@@ -25,12 +26,6 @@ const App = () => {
   const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
   const [selectedSeries, setSelectedSeries] = useState<string[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
-
-  /*
-   * Optional, so it never takes part in validation. Held outside `values`
-   * because that object is all strings - handleChange assigns
-   * event.target.value, which for a checkbox is the wrong property.
-   */
   const [wantsNewsletter, setWantsNewsletter] = useState(false)
   const alertRef = useRef<HTMLParagraphElement>(null)
   const [errorNonce, setErrorNonce] = useState(0)
@@ -91,11 +86,14 @@ const App = () => {
     }
 
 
-    console.log('Registration payload', {
-      ...values,
+    /* Validation passed, so state is safe to shape for the backend. */
+    const payload = buildRegistrationPayload(
+      values,
       selectedSeries,
       wantsNewsletter,
-    })
+    )
+
+    console.log('Registration payload', payload)
   }
 
 

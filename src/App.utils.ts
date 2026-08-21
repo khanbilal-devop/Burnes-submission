@@ -1,8 +1,5 @@
-import type { RegistrationFormValues } from './App.types'
-import {
-  UNITED_STATES,
-  NO_GOVERNMENT_AFFILIATION,
-} from './constants/formOptions'
+import type { RegistrationFormValues ,RegistrationPayload} from './App.types'
+import { UNITED_STATES,NO_GOVERNMENT_AFFILIATION } from './constants/formOptions'
 
 export const INITIAL_VALUES: RegistrationFormValues = {
   email: '',
@@ -16,7 +13,7 @@ export const INITIAL_VALUES: RegistrationFormValues = {
 }
 
 /* Treats whitespace-only input as empty, so " " does not pass as a name. */
-const isBlank = (value: string) => value.trim().length === 0
+export const isBlank = (value: string) => value.trim().length === 0
 
 /* Deliberately loose: something@something.tld, no attempt to police TLDs. */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -51,9 +48,7 @@ export const getValidationError = (
   selectedSeries: string[],
 ): string | null => {
 
-    if (selectedSeries.length === 0) {
-    return 'Please select at least one event series to register for.'
-  }
+  
 
   if (
     isBlank(values.email) ||
@@ -89,4 +84,12 @@ export const getValidationError = (
 
 
   return null
+}
+
+export const buildRegistrationPayload = (
+values: RegistrationFormValues,
+  selectedSeries: string[],
+  wantsNewsletter: boolean,
+): RegistrationPayload => {
+  return {email : "email"};
 }
