@@ -18,14 +18,14 @@ const FormField = (props: FormFieldProps) => {
 
   useClearOnUnmount(name, onUnmount)
 
-  const className = span === 'half' ? 'field field--half' : 'field'
+  const className = span === 'half' ? 'field field-half' : 'field'
 
   return (
     <div className={className}>
-      <label className="field__label" htmlFor={id}>
+      <label className="field-label" htmlFor={id}>
         {label}
         {required && (
-          <span className="field__required" aria-hidden="true">
+          <span className="field-required" aria-hidden="true">
             *
           </span>
         )}
@@ -35,7 +35,7 @@ const FormField = (props: FormFieldProps) => {
         <select
           id={id}
           name={name}
-          className="field__control"
+          className="field-control"
           value={value}
           onChange={onChange}
           required={required}
@@ -51,7 +51,7 @@ const FormField = (props: FormFieldProps) => {
         <input
           id={id}
           name={name}
-          className="field__control"
+          className="field-control"
           type={props.type ?? 'text'}
           value={value}
           onChange={onChange}
