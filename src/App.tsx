@@ -25,7 +25,6 @@ const App = () => {
   const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
   const [selectedSeries, setSelectedSeries] = useState<string[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const alertRef = useRef<HTMLParagraphElement>(null)
   const [errorNonce, setErrorNonce] = useState(0)
   
@@ -74,8 +73,7 @@ const App = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    setIsFormSubmitted(true)
-    setErrorMessage('');
+    setErrorMessage('')
 
     const validationError = getValidationError(values, selectedSeries)
 
@@ -87,7 +85,6 @@ const App = () => {
 
 
     console.log('Registration payload', { ...values, selectedSeries })
-    setIsFormSubmitted(false)
   }
 
 
@@ -268,11 +265,7 @@ const App = () => {
         <hr className="card-divider" />
 
         <div className="form-actions">
-          <button
-            type="submit"
-            className="register-button"
-            disabled={isFormSubmitted}
-          >
+          <button type="submit" className="register-button">
             Register
           </button>
         </div>

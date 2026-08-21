@@ -16,7 +16,7 @@ export const INITIAL_VALUES: RegistrationFormValues = {
 }
 
 /* Treats whitespace-only input as empty, so " " does not pass as a name. */
-export const isBlank = (value: string) => value.trim().length === 0
+const isBlank = (value: string) => value.trim().length === 0
 
 /* Deliberately loose: something@something.tld, no attempt to police TLDs. */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
