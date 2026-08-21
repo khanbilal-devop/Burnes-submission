@@ -11,7 +11,6 @@
   --color-page: #e4effc;
   --color-surface: #ffffff;
   --color-text: #1a365d;
-  --color-body: #1a1a1a; 
   --color-heading: #124d8f;
   --color-border: #e2e8f0; /* field borders + section dividers */
   --color-primary: #0066cc; /* focus ring + primary actions */
@@ -32,6 +31,7 @@
   --tracking-wide: 0.03em;
 
   /* ---------- Spacing (4px scale) ---------- */
+  --space-1: 0.25rem; /* 4px */
   --space-2: 0.5rem; /* 8px */
   --space-4: 1rem; /* 16px */
   --space-6: 1.5rem; /* 24px */
