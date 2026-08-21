@@ -4,6 +4,12 @@ const DIRECTUS_URL = 'https://burnes-center.directus.app'
 
 const COLLECTION = 'cw_intake'
 
+const EMAIL_PATTERN = /^[^\s@.]+(\.[^\s@.]+)*@[^\s@.]+(\.[^\s@.]+)+$/
+const NAME_PATTERN = /^[\p{L}\s'’.-]+$/u
+
+const asText = (value: unknown) =>
+  typeof value === 'string' ? value.trim() : ''
+
 
 const buildRecord = (body: Record<string, unknown>) => ({
   email: body.email,
@@ -61,6 +67,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res
       .status(400)
       .json({ error: `Missing required fields: ${missing.join(', ')}` })
+  }
+
+  const invalid: string[] = []
+
+  if (!EMAIL_PATTERN.test(asText(body.email))) invalid.push('email')
+  if (!NAME_PATTERN.test(asText(body.first_name))) invalid.push('first_name')
+  if (!NAME_PATTERN.test(asText(body.last_name))) invalid.push('last_name')
+  if (!NAME_PATTERN.test(asText(body.country))) invalid.push('country')
+
+  let seriesIds: unknown
+  try {
+    seriesIds = JSON.parse(series)
+  } catch {
+    seriesIds = null
+  }
+
+  if (!Array.isArray(seriesIds) || seriesIds.length === 0) {
+    invalid.push('workshop_series')
+  }
+
+  if (invalid.length > 0) {
+    return res
+      .status(400)
+      .json({ error: `Invalid fields: ${invalid.join(', ')}` })
   }
 
   try {
