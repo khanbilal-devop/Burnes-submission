@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import FormField from './components/FormField/FormField'
 import SeriesItem from './components/SeriesItem/SeriesItem'
@@ -38,6 +38,8 @@ const App = () => {
   const [selectedSeries, setSelectedSeries] = useState<string[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+  const alertRef = useRef<HTMLParagraphElement>(null)
+  const [errorNonce, setErrorNonce] = useState(0)
   
 
   const asksGovernmentLevel =
@@ -71,11 +73,30 @@ const App = () => {
   }, [])
 
 
+  /*
+   * Bring the banner into view after a failed submit.
+   */
+  useEffect(() => {
+    if (!errorMessage) return
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    alertRef.current?.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'center',
+    })
+  }, [errorNonce, errorMessage])
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
      setErrorMessage('')
-    if (checkForErrors()) return
-    setIsFormSubmitted(true)
+    if (checkForErrors()) {
+      setErrorNonce((previous) => previous + 1)
+      return
+    }
     console.log('Registration payload', { ...values, selectedSeries })
     setIsFormSubmitted(false)
   }
@@ -133,7 +154,7 @@ const App = () => {
         </header>
 
         {errorMessage && (
-          <p className="alert alert-error" role="alert">
+          <p ref={alertRef} className="alert alert-error" role="alert">
             {errorMessage}
           </p>
         )}
