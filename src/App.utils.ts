@@ -1,12 +1,8 @@
 import type { RegistrationFormValues } from './App.types'
-import { UNITED_STATES,NO_GOVERNMENT_AFFILIATION } from './constants/formOptions'
-
-/*
- * Option values the form branches on.
- * These must stay in step with the labels in constants/formOptions.ts - the
- * option value *is* the string compared here.
- */
-
+import {
+  UNITED_STATES,
+  NO_GOVERNMENT_AFFILIATION,
+} from './constants/formOptions'
 
 export const INITIAL_VALUES: RegistrationFormValues = {
   email: '',

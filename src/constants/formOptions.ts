@@ -2,9 +2,15 @@ import type { Option } from '../App.types'
 
 /* Select options for the registration form. */
 
+
+export const UNITED_STATES = 'United States'
+export const OUTSIDE_UNITED_STATES = 'Outside the United States'
+export const NO_GOVERNMENT_AFFILIATION =
+  'No, I do not work for or support a government or government-affiliated organization'
+
 export const COUNTRY_OPTIONS: Option[] = [
-  { value: 'United States', label: 'United States' },
-  { value: 'Outside the United States', label: 'Outside the United States' },
+  { value: UNITED_STATES, label: UNITED_STATES },
+  { value: OUTSIDE_UNITED_STATES, label: OUTSIDE_UNITED_STATES },
 ]
 
 export const GOVERNMENT_OPTIONS: Option[] = [
@@ -19,9 +25,8 @@ export const GOVERNMENT_OPTIONS: Option[] = [
       'Yes, I work for a government-affiliated organization (e.g., public university, nonprofit, or quasi-governmental organization)',
   },
   {
-    value: 'No, I do not work for or support a government or government-affiliated organization',
-    label:
-      'No, I do not work for or support a government or government-affiliated organization',
+    value: NO_GOVERNMENT_AFFILIATION,
+    label: NO_GOVERNMENT_AFFILIATION,
   },
 ]
 
@@ -63,7 +68,3 @@ export const GOVERNMENT_LEVEL_OPTIONS: Option[] = GOVERNMENT_LEVELS.map(
 )
 
 
-export const UNITED_STATES = 'United States'
-export const OUTSIDE_UNITED_STATES = 'Outside the United States'
-export const NO_GOVERNMENT_AFFILIATION =
-  'No, I do not work for or support a government or government-affiliated organization'
