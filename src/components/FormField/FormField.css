@@ -67,6 +67,8 @@
  * reference does not quite manage (48.5px vs 50px).
  */
 .field__control {
+  margin-block-start: auto;
+
   block-size: var(--field-block-size);
   padding-inline: var(--field-padding-inline);
 
@@ -82,6 +84,33 @@
  * :focus-visible rather than :focus, so the ring appears for keyboard users
  * but not on a mouse click.
  */
+/*
+ * Browser default is a mid-grey at normal weight. The reference uses a lighter
+ * colour at semibold - that heavier weight is what makes its placeholders read
+ * as noticeably chunkier than a plain one.
+ */
+.field__control::placeholder {
+  color: var(--color-placeholder);
+  font-weight: var(--weight-semibold);
+  opacity: 1; /* Firefox dims placeholders by default */
+}
+
+/*
+ * Replace the native dropdown arrow with the reference's own triangle.
+ * appearance: none removes the OS control, so the arrow has to be drawn back
+ * in as a background image, and the text needs room not to run under it.
+ */
+.field__control:is(select) {
+  appearance: none;
+  cursor: pointer;
+
+  background-image: var(--field-arrow-image);
+  background-repeat: no-repeat;
+  background-position: calc(100% - var(--field-padding-inline)) 50%;
+
+  padding-inline-end: var(--space-10);
+}
+
 .field__control:focus-visible {
   outline: none;
   border-color: var(--color-primary);

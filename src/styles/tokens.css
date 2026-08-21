@@ -12,6 +12,7 @@
   --color-surface: #ffffff;
   --color-text: #1a365d;
   --color-heading: #124d8f;
+  --color-placeholder: #9ca3af; /* placeholder text inside a control */
   --color-border: #e2e8f0; /* field borders + section dividers */
   --color-primary: #0066cc; /* focus ring + primary actions */
   --color-required: #dc3545; /* the * on required labels */
@@ -24,6 +25,7 @@
   --text-xs: 0.8125rem; /* 13px */
   --text-base: 1rem; /* 16px */
 
+  --weight-semibold: 600;
   --weight-bold: 700;
 
   --leading-tight: 1.25;
@@ -36,6 +38,7 @@
   --space-4: 1rem; /* 16px */
   --space-6: 1.5rem; /* 24px */
   --space-8: 2rem; /* 32px */
+  --space-10: 2.5rem; /* 40px */
   --space-12: 3rem; /* 48px */
   --space-16: 4rem; /* 64px */
   --space-28: 7rem; /* 112px */
@@ -50,6 +53,13 @@
   --field-padding-inline: 0.875rem; /* 14px */
 
   /* ---------- Radius & elevation ---------- */
+  /*
+   * The select arrow, as an inline SVG. A solid triangle, matching the
+   * reference. It lives in this file because the fill colour is baked into the
+   * data URI - %23 is an encoded '#', so a var() cannot be used inside it.
+   */
+  --field-arrow-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9 1 4h10z'/%3E%3C/svg%3E");
+
   --radius-sm: 6px;
   --radius-md: 12px;
   --shadow-card: 0 2px 8px rgb(0 0 0 / 0.1);
