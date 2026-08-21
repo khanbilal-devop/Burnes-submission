@@ -19,15 +19,6 @@
   background-color: var(--color-row-hover);
 }
 
-/* flex-shrink: 0 keeps the box square when a long title squeezes the row. */
-.series-item-checkbox {
-  flex-shrink: 0;
-  inline-size: var(--checkbox-size);
-  block-size: var(--checkbox-size);
-  accent-color: var(--color-primary);
-  cursor: pointer;
-}
-
 .series-item-icon {
   flex-shrink: 0;
   inline-size: var(--series-icon-size);

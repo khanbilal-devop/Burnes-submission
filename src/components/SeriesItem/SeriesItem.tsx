@@ -19,7 +19,6 @@ const SeriesItem = ({
     <label className="series-item">
       <input
         type="checkbox"
-        className="series-item-checkbox"
         checked={checked}
         onChange={() => onToggle(id)}
       />
