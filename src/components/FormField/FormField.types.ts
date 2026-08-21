@@ -1,13 +1,15 @@
+import type { ChangeEvent } from 'react'
+import type { Option } from '../../App.types'
 
-
-export type Option = {
-  value: string
-  label: string
-}
+/* One event type covers both controls, so the parent needs a single handler. */
+export type FieldChangeEvent = ChangeEvent< HTMLInputElement | HTMLSelectElement>
 
 type BaseProps = {
   id: string
+  name: string
   label: string
+  value: string
+  onChange: (event: FieldChangeEvent) => void
   required?: boolean
   placeholder?: string
 }
