@@ -61,3 +61,9 @@ const GOVERNMENT_LEVELS = [
 export const GOVERNMENT_LEVEL_OPTIONS: Option[] = GOVERNMENT_LEVELS.map(
   (level) => ({ value: level, label: level }),
 )
+
+
+export const UNITED_STATES = 'United States'
+export const OUTSIDE_UNITED_STATES = 'Outside the United States'
+export const NO_GOVERNMENT_AFFILIATION =
+  'No, I do not work for or support a government or government-affiliated organization'

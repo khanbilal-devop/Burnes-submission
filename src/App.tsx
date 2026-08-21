@@ -9,29 +9,17 @@ import {
   GOVERNMENT_LEVEL_OPTIONS,
   GOVERNMENT_OPTIONS,
   US_STATE_OPTIONS,
+  UNITED_STATES,
+  OUTSIDE_UNITED_STATES,
 } from './constants/formOptions'
 import { EVENT_SERIES } from './constants/eventSeries'
+import {
+  INITIAL_VALUES,
+  getValidationError,
+  needsGovernmentLevel,
+  toggleInList,
+} from './App.utils'
 import './App.css'
-
-const INITIAL_VALUES: RegistrationFormValues = {
-  email: '',
-  firstName: '',
-  lastName: '',
-  country: '',
-  state: '',
-  nonUsCountry: '',
-  governmentAffiliation: '',
-  governmentLevel: '',
-}
-
-const isBlank = (value: string) => value.trim().length === 0
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-const UNITED_STATES = 'United States'
-const OUTSIDE_UNITED_STATES = 'Outside the United States'
-const NO_GOVERNMENT_AFFILIATION =
-  'No, I do not work for or support a government or government-affiliated organization'
 
 const App = () => {
   const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
@@ -42,19 +30,13 @@ const App = () => {
   const [errorNonce, setErrorNonce] = useState(0)
   
 
-  const asksGovernmentLevel =
-    values.governmentAffiliation !== '' &&
-    values.governmentAffiliation !== NO_GOVERNMENT_AFFILIATION
+  const asksGovernmentLevel = needsGovernmentLevel(values.governmentAffiliation)
 
   const allSelected = selectedSeries.length === EVENT_SERIES.length
   
   const toggleSeries = useCallback((id: string) => {
     setErrorMessage('')
-    setSelectedSeries((previous) =>
-      previous.includes(id)
-        ? previous.filter((seriesId) => seriesId !== id)
-        : [...previous, id],
-    )
+    setSelectedSeries((previous) => toggleInList(previous, id))
   }, [])
 
   const toggleAllSeries = () => {
@@ -92,56 +74,23 @@ const App = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-     setErrorMessage('')
-    if (checkForErrors()) {
+    setIsFormSubmitted(true)
+    setErrorMessage('');
+
+    const validationError = getValidationError(values, selectedSeries)
+
+    if (validationError) {
+      setErrorMessage(validationError)
       setErrorNonce((previous) => previous + 1)
       return
     }
+
+
     console.log('Registration payload', { ...values, selectedSeries })
     setIsFormSubmitted(false)
   }
 
-  const checkForErrors = () => {
 
-    if (selectedSeries.length === 0) {
-      setErrorMessage('Please select at least one event series to register for.')
-      return true
-    }
-
-    if (isBlank(values.email) || isBlank(values.firstName) || isBlank(values.lastName)) {
-      setErrorMessage('Please fill in all required fields (Email, First Name, Last Name).')
-      return true
-    }
-
-    if (!EMAIL_PATTERN.test(values.email.trim())) {
-      setErrorMessage('Please enter a valid email address.')
-      return true
-    }
-
-    if (isBlank(values.country)) {
-      setErrorMessage('Country is required.')
-      return true
-    }
-
-    /* State only exists while the country is the US. */
-    if (values.country === UNITED_STATES && isBlank(values.state)) {
-      setErrorMessage('State/Province is required.')
-      return true
-    }
-
-    if (isBlank(values.governmentAffiliation)) {
-      setErrorMessage('Please tell us about your government affiliation.')
-      return true
-    }
-
-    /* Same conditional as the field itself, so the two cannot drift apart. */
-    if (asksGovernmentLevel && isBlank(values.governmentLevel)) {
-      setErrorMessage('Please select your level of government.')
-      return true
-    }
-
-    return false
-  }
 
 
   return (
