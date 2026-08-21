@@ -33,6 +33,7 @@ const App = () => {
   const [registeredIds, setRegisteredIds] = useState<string[]>([])
   const [wantsNewsletter, setWantsNewsletter] = useState(false)
   const [errorNonce, setErrorNonce] = useState(0)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const alertRef = useRef<HTMLParagraphElement>(null)
 
   const asksGovernmentLevel = needsGovernmentLevel(values.governmentAffiliation)
@@ -41,6 +42,18 @@ const App = () => {
 
   const { registered: registeredSeriesItems, remaining: remainingSeries } =
     partitionSeries(EVENT_SERIES, registeredIds)
+
+
+  const errorBanner = errorMessage ? (
+    <p ref={alertRef} className="alert alert-error" role="alert">
+      {errorMessage}
+    </p>
+  ) : null
+
+  const showError = (message: string) => {
+    setErrorMessage(message)
+    setErrorNonce((previous) => previous + 1)
+  }
 
   const toggleSeries = useCallback((id: string) => {
     setErrorMessage('')
@@ -71,7 +84,7 @@ const App = () => {
     scrollIntoViewRespectingMotion(alertRef.current)
   }, [errorNonce, errorMessage])
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     setErrorMessage('')
@@ -79,37 +92,53 @@ const App = () => {
     const validationError = getValidationError(values, selectedSeries)
 
     if (validationError) {
-      setErrorMessage(validationError)
-      setErrorNonce((previous) => previous + 1)
+      showError(validationError)
       return
     }
 
-    /* Validation passed, so state is safe to shape for the backend. */
     const payload = buildRegistrationPayload(
       values,
       selectedSeries,
       wantsNewsletter,
     )
 
-    console.log('Registration payload', payload)
+    setIsSubmitting(true)
 
-    const nextRegisteredIds = [...registeredIds, ...selectedSeries]
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
 
-    setRegisteredIds(nextRegisteredIds)
+      if (!response.ok) {
+        const body = await response.json().catch(() => null)
 
-    /* Everything still on offer starts ticked, matching the reference. */
-    setSelectedSeries(
-      getSeriesIds(partitionSeries(EVENT_SERIES, nextRegisteredIds).remaining),
-    )
+        showError(
+          body?.error ?? 'We could not save your registration. Please try again.',
+        )
+        return
+      }
+
+      /*
+       * Only advance once the write is confirmed. Returning early above means a
+       * failed call leaves the user on the same page with their choices intact.
+       */
+      const nextRegisteredIds = [...registeredIds, ...selectedSeries]
+
+      setRegisteredIds(nextRegisteredIds)
+      setSelectedSeries(
+        getSeriesIds(partitionSeries(EVENT_SERIES, nextRegisteredIds).remaining),
+      )
+    } catch {
+      showError('Could not reach the server. Please check your connection.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
     <main className="page">
-      {/*
-        The success phase sits directly on the page background, so it swaps the
-        card chrome for a bare width-constrained shell. Still a <form>, so the
-        second Register button keeps working.
-      */}
       <form
         className={hasRegistered ? 'success-shell' : 'card'}
         onSubmit={handleSubmit}
@@ -117,6 +146,8 @@ const App = () => {
       >
         {hasRegistered ? (
           <section className="success">
+            {errorBanner}
+
             <div className="success-box">
               <p className="success-text">
                 You successfully registered to the series:
@@ -166,8 +197,14 @@ const App = () => {
                   </div>
 
                   <div className="form-actions">
-                    <button type="submit" className="register-button">
-                      Register for selected series
+                    <button
+                      type="submit"
+                      className="register-button"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting
+                        ? 'Registering…'
+                        : 'Register for selected series'}
                     </button>
                   </div>
                 </div>
@@ -182,11 +219,7 @@ const App = () => {
               </h1>
             </header>
 
-            {errorMessage && (
-              <p ref={alertRef} className="alert alert-error" role="alert">
-                {errorMessage}
-              </p>
-            )}
+            {errorBanner}
 
             <div className="form-layout">
               <div className="form-row">
@@ -357,8 +390,12 @@ const App = () => {
             </label>
 
             <div className="form-actions">
-              <button type="submit" className="register-button">
-                Register
+              <button
+                type="submit"
+                className="register-button"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Registering…' : 'Register'}
               </button>
             </div>
 
