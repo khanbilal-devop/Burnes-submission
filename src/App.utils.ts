@@ -32,24 +32,14 @@ export const toggleInList = (list: string[], item: string) =>
     ? list.filter((entry) => entry !== item)
     : [...list, item]
 
-/*
- * Returns the first validation failure as a message, or null when everything
- * passes.
- *
- * Pure on purpose: it reads values and returns a string rather than calling
- * setState itself. That keeps the rules testable without React, and leaves the
- * component to decide what to do with the message.
- *
- * Order matters - the first failure wins, so these run in the order the fields
- * appear on screen.
- */
 export const getValidationError = (
   values: RegistrationFormValues,
   selectedSeries: string[],
 ): string | null => {
-
+  if (selectedSeries.length === 0) {
+    return 'Please select at least one event series to register for.'
+  }
   
-
   if (
     isBlank(values.email) ||
     isBlank(values.firstName) ||
@@ -81,15 +71,20 @@ export const getValidationError = (
   ) {
     return 'Please select your level of government.'
   }
-
-
   return null
 }
 
+
 export const buildRegistrationPayload = (
-values: RegistrationFormValues,
-  selectedSeries: string[],
-  wantsNewsletter: boolean,
-): RegistrationPayload => {
-  return {email : "email"};
-}
+  values: RegistrationFormValues,
+): RegistrationPayload => ({
+  email: values.email.trim(),
+  first_name: values.firstName.trim(),
+  last_name: values.lastName.trim(),
+  country: values.country,
+  gov_org: values.governmentAffiliation,
+  gov_level: needsGovernmentLevel(values.governmentAffiliation)
+    ? values.governmentLevel
+    : null,
+  state: values.country === UNITED_STATES ? values.state : null,
+});

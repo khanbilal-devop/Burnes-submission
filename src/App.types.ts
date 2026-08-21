@@ -26,6 +26,13 @@ export type RegistrationFormValues = {
 }
 
 
+
 export type RegistrationPayload = {
   email: string
+  first_name: string
+  last_name: string
+  country: string
+  gov_org: string
+  gov_level: string | null
+  state: string | null
 }
