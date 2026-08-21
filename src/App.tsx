@@ -18,6 +18,7 @@ import {
   buildRegistrationPayload,
   getValidationError,
   needsGovernmentLevel,
+  orderSeriesBySelection,
   toggleInList,
 } from './App.utils'
 import './App.css'
@@ -26,12 +27,22 @@ const App = () => {
   const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
   const [selectedSeries, setSelectedSeries] = useState<string[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [registeredIds, setRegisteredIds] = useState<string[]>([])
   const [wantsNewsletter, setWantsNewsletter] = useState(false)
   const alertRef = useRef<HTMLParagraphElement>(null)
   const [errorNonce, setErrorNonce] = useState(0)
   
 
   const asksGovernmentLevel = needsGovernmentLevel(values.governmentAffiliation)
+
+  const hasRegistered = registeredIds.length > 0
+
+  const registeredSeriesItems = EVENT_SERIES.filter((series) =>
+    registeredIds.includes(series.id),
+  )
+  const remainingSeries = EVENT_SERIES.filter(
+    (series) => !registeredIds.includes(series.id),
+  )
 
   const allSelected = selectedSeries.length === EVENT_SERIES.length
   
@@ -94,6 +105,26 @@ const App = () => {
     )
 
     console.log('Registration payload', payload)
+
+    /*
+     * No API call yet - move straight to the success view. The series just
+     * registered are added to registeredIds, and the selection is cleared so
+     * the leftover list starts unticked.
+     */
+    /*
+     * Computed locally rather than read back from state: setRegisteredIds has
+     * not applied yet at this point, so registeredIds is still the old value.
+     */
+    const nextRegisteredIds = [...registeredIds, ...selectedSeries]
+
+    setRegisteredIds(nextRegisteredIds)
+
+    /* Everything still on offer starts ticked, matching the reference. */
+    setSelectedSeries(
+      EVENT_SERIES.filter(
+        (series) => !nextRegisteredIds.includes(series.id),
+      ).map((series) => series.id),
+    )
   }
 
 
@@ -101,199 +132,271 @@ const App = () => {
 
   return (
     <main className="page">
-      <form className="card" onSubmit={handleSubmit} noValidate>
-        <header>
-          <h1 id="registration-heading" className="card-heading">
-            Registration Details
-          </h1>
-        </header>
+      {/*
+        The success phase sits directly on the page background, so it swaps the
+        card chrome for a bare width-constrained shell. Still a <form>, so the
+        second Register button keeps working.
+      */}
+      <form
+        className={hasRegistered ? 'success-shell' : 'card'}
+        onSubmit={handleSubmit}
+        noValidate
+      >
+        {hasRegistered ? (
+          <section className="success">
+            <div className="success-box">
+              <p className="success-text">
+                You successfully registered to the series:
+              </p>
+            </div>
 
-        {errorMessage && (
-          <p ref={alertRef} className="alert alert-error" role="alert">
-            {errorMessage}
-          </p>
-        )}
+            <div className="success-cards">
+              {registeredSeriesItems.map((series) => (
+                <div key={series.id} className="success-card">
+                  <img
+                    className="success-card-icon"
+                    src={series.imageUrl}
+                    alt=""
+                    width="40"
+                    height="40"
+                  />
+                  <span className="success-card-title">{series.title}</span>
+                </div>
+              ))}
+            </div>
 
+            {/* Once every series is registered there is nothing left to offer. */}
+            {remainingSeries.length > 0 && (
+              <>
+                <hr className="card-divider" />
 
-        <div className="form-layout">
-          <div className="form-row">
-            <FormField
-              id="email"
-              name="email"
-              label="Email"
-              type="email"
-              placeholder="your.email@example.com"
-              value={values.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+                <div className="other-series">
+                  <h2 className="other-series-title">
+                    Other InnovateUS Offerings you might be interested in
+                  </h2>
+                  <p className="other-series-description">
+                    If you like to register for any of the series please select
+                    below and click register
+                  </p>
 
-          <div className="form-row">
-            <FormField
-              id="first-name"
-              name="firstName"
-              label="First Name"
-              placeholder="John"
-              value={values.firstName}
-              onChange={handleChange}
-              required
-            />
-            <FormField
-              id="last-name"
-              name="lastName"
-              label="Last Name"
-              placeholder="Doe"
-              value={values.lastName}
-              onChange={handleChange}
-              required
-            />
-          </div>
+                  <div className="series-list other-series-list">
+                    {remainingSeries.map((series) => (
+                      <SeriesItem
+                        key={series.id}
+                        id={series.id}
+                        title={series.title}
+                        imageUrl={series.imageUrl}
+                        checked={selectedSeries.includes(series.id)}
+                        onToggle={toggleSeries}
+                      />
+                    ))}
+                  </div>
 
+                  <div className="form-actions">
+                    <button type="submit" className="register-button">
+                      Register for selected series
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </section>
+        ) : (
+          <>
+            <header>
+              <h1 id="registration-heading" className="card-heading">
+                Registration Details
+              </h1>
+            </header>
 
-          <div className="form-row">
-            <FormField
-              as="select"
-              span="half"
-              id="country"
-              name="country"
-              label="Country"
-              placeholder="Select country (required)"
-              options={COUNTRY_OPTIONS}
-              value={values.country}
-              onChange={handleChange}
-              required
-            />
-
-            {values.country === UNITED_STATES && (
-              <FormField
-                as="select"
-                span="half"
-                id="state"
-                name="state"
-                label="State/Province"
-                placeholder="Select state (required)"
-                options={US_STATE_OPTIONS}
-                value={values.state}
-                onChange={handleChange}
-                onUnmount={clearField}
-                required
-              />
+            {errorMessage && (
+              <p ref={alertRef} className="alert alert-error" role="alert">
+                {errorMessage}
+              </p>
             )}
 
-            {values.country === OUTSIDE_UNITED_STATES && (
-              <FormField
-                span="half"
-                id="non-us-country"
-                name="nonUsCountry"
-                label="Country (Non US only)"
-                placeholder="Enter your answer (optional)"
-                value={values.nonUsCountry}
-                onChange={handleChange}
-                onUnmount={clearField}
+
+            <div className="form-layout">
+              <div className="form-row">
+                <FormField
+                  id="email"
+                  name="email"
+                  label="Email"
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={values.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-row">
+                <FormField
+                  id="first-name"
+                  name="firstName"
+                  label="First Name"
+                  placeholder="John"
+                  value={values.firstName}
+                  onChange={handleChange}
+                  required
+                />
+                <FormField
+                  id="last-name"
+                  name="lastName"
+                  label="Last Name"
+                  placeholder="Doe"
+                  value={values.lastName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+
+              <div className="form-row">
+                <FormField
+                  as="select"
+                  span="half"
+                  id="country"
+                  name="country"
+                  label="Country"
+                  placeholder="Select country (required)"
+                  options={COUNTRY_OPTIONS}
+                  value={values.country}
+                  onChange={handleChange}
+                  required
+                />
+
+                {values.country === UNITED_STATES && (
+                  <FormField
+                    as="select"
+                    span="half"
+                    id="state"
+                    name="state"
+                    label="State/Province"
+                    placeholder="Select state (required)"
+                    options={US_STATE_OPTIONS}
+                    value={values.state}
+                    onChange={handleChange}
+                    onUnmount={clearField}
+                    required
+                  />
+                )}
+
+                {values.country === OUTSIDE_UNITED_STATES && (
+                  <FormField
+                    span="half"
+                    id="non-us-country"
+                    name="nonUsCountry"
+                    label="Country (Non US only)"
+                    placeholder="Enter your answer (optional)"
+                    value={values.nonUsCountry}
+                    onChange={handleChange}
+                    onUnmount={clearField}
+                  />
+                )}
+              </div>
+
+              <div className="form-row">
+                <FormField
+                  as="select"
+                  span="half"
+                  id="government-affiliation"
+                  name="governmentAffiliation"
+                  label="Do you work for or primarily support a government or government-affiliated organization?"
+                  placeholder="Select"
+                  options={GOVERNMENT_OPTIONS}
+                  value={values.governmentAffiliation}
+                  onChange={handleChange}
+                  required
+                />
+
+                {asksGovernmentLevel && (
+                  <FormField
+                    as="select"
+                    span="half"
+                    id="government-level"
+                    name="governmentLevel"
+                    label="If a government employee or consultant: What level of government?"
+                    placeholder="Select"
+                    options={GOVERNMENT_LEVEL_OPTIONS}
+                    value={values.governmentLevel}
+                    onChange={handleChange}
+                    onUnmount={clearField}
+                    required
+                  />
+                )}
+              </div>
+            </div>
+
+            <hr className="card-divider" />
+
+            <section className="series" aria-labelledby="series-heading">
+              <div className="series-header">
+                <h2 id="series-heading" className="series-title">
+                  Selected Event Series
+                </h2>
+
+                <p className="series-count">
+                  You are registering for <strong>{selectedSeries.length}</strong>{' '}
+                  event series.
+                </p>
+              </div>
+
+              <div className="series-actions">
+                <button
+                  type="button"
+                  className="series-select-all"
+                  onClick={toggleAllSeries}
+                >
+                  {allSelected ? 'Unselect all series' : 'Select all series'}
+                </button>
+
+                {selectedSeries.length === 0 && (
+                  <span className="series-hint">
+                    Select at least one series to continue.
+                  </span>
+                )}
+              </div>
+
+              <div className="series-list">
+                {orderSeriesBySelection(EVENT_SERIES, selectedSeries).map((series) => (
+                  <SeriesItem
+                    key={series.id}
+                    id={series.id}
+                    title={series.title}
+                    imageUrl={series.imageUrl}
+                    checked={selectedSeries.includes(series.id)}
+                    onToggle={toggleSeries}
+                  />
+                ))}
+              </div>
+            </section>
+
+            <hr className="card-divider" />
+
+            <label className="optin">
+              <input
+                type="checkbox"
+                checked={wantsNewsletter}
+                onChange={(event) => setWantsNewsletter(event.target.checked)}
               />
-            )}
-          </div>
-
-          <div className="form-row">
-            <FormField
-              as="select"
-              span="half"
-              id="government-affiliation"
-              name="governmentAffiliation"
-              label="Do you work for or primarily support a government or government-affiliated organization?"
-              placeholder="Select"
-              options={GOVERNMENT_OPTIONS}
-              value={values.governmentAffiliation}
-              onChange={handleChange}
-              required
-            />
-
-            {asksGovernmentLevel && (
-              <FormField
-                as="select"
-                span="half"
-                id="government-level"
-                name="governmentLevel"
-                label="If a government employee or consultant: What level of government?"
-                placeholder="Select"
-                options={GOVERNMENT_LEVEL_OPTIONS}
-                value={values.governmentLevel}
-                onChange={handleChange}
-                onUnmount={clearField}
-                required
-              />
-            )}
-          </div>
-        </div>
-
-        <hr className="card-divider" />
-
-        <section className="series" aria-labelledby="series-heading">
-          <div className="series-header">
-            <h2 id="series-heading" className="series-title">
-              Selected Event Series
-            </h2>
-
-            <p className="series-count">
-              You are registering for <strong>{selectedSeries.length}</strong>{' '}
-              event series.
-            </p>
-          </div>
-
-          <div className="series-actions">
-            <button
-              type="button"
-              className="series-select-all"
-              onClick={toggleAllSeries}
-            >
-              {allSelected ? 'Unselect all series' : 'Select all series'}
-            </button>
-
-            {selectedSeries.length === 0 && (
-              <span className="series-hint">
-                Select at least one series to continue.
+              <span className="optin-label">
+                Email me occasional updates about new event series (optional)
               </span>
-            )}
-          </div>
+            </label>
 
-          <div className="series-list">
-            {EVENT_SERIES.map((series) => (
-              <SeriesItem
-                key={series.id}
-                id={series.id}
-                title={series.title}
-                imageUrl={series.imageUrl}
-                checked={selectedSeries.includes(series.id)}
-                onToggle={toggleSeries}
-              />
-            ))}
-          </div>
-        </section>
+            <div className="form-actions">
+              <button type="submit" className="register-button">
+                Register
+              </button>
+            </div>
 
-        <hr className="card-divider" />
-
-        <label className="optin">
-          <input
-            type="checkbox"
-            checked={wantsNewsletter}
-            onChange={(event) => setWantsNewsletter(event.target.checked)}
-          />
-          <span className="optin-label">
-            Email me occasional updates about new event series (optional)
-          </span>
-        </label>
-
-        <div className="form-actions">
-          <button type="submit" className="register-button">
-            Register
-          </button>
-        </div>
-
-        <p className="registration-help">
-          Having trouble registering? Contact us at{' '}
-          <a href="mailto:hello@innovate-us.org">hello [at] innovate-us.org</a>
-        </p>
+            <p className="registration-help">
+              Having trouble registering? Contact us at{' '}
+              <a href="mailto:hello@innovate-us.org">hello [at] innovate-us.org</a>
+            </p>
+          </>
+        )}
       </form>
     </main>
   )

@@ -1,4 +1,8 @@
-import type { RegistrationFormValues ,RegistrationPayload} from './App.types'
+import type {
+  EventSeries,
+  RegistrationFormValues,
+  RegistrationPayload,
+} from './App.types'
 import { UNITED_STATES,NO_GOVERNMENT_AFFILIATION } from './constants/formOptions'
 
 export const INITIAL_VALUES: RegistrationFormValues = {
@@ -94,3 +98,14 @@ export const buildRegistrationPayload = (
   newsletter: wantsNewsletter,
   consent_at: wantsNewsletter ? consentedAt : null,
 });
+
+
+export const orderSeriesBySelection = (
+  series: EventSeries[],
+  selectedIds: string[],
+): EventSeries[] => [
+  ...selectedIds
+    .map((id) => series.find((item) => item.id === id))
+    .filter((item): item is EventSeries => item !== undefined),
+  ...series.filter((item) => !selectedIds.includes(item.id)),
+]
