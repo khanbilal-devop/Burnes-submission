@@ -25,6 +25,13 @@ const App = () => {
   const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
   const [selectedSeries, setSelectedSeries] = useState<string[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
+
+  /*
+   * Optional, so it never takes part in validation. Held outside `values`
+   * because that object is all strings - handleChange assigns
+   * event.target.value, which for a checkbox is the wrong property.
+   */
+  const [wantsNewsletter, setWantsNewsletter] = useState(false)
   const alertRef = useRef<HTMLParagraphElement>(null)
   const [errorNonce, setErrorNonce] = useState(0)
   
@@ -84,7 +91,11 @@ const App = () => {
     }
 
 
-    console.log('Registration payload', { ...values, selectedSeries })
+    console.log('Registration payload', {
+      ...values,
+      selectedSeries,
+      wantsNewsletter,
+    })
   }
 
 
@@ -263,6 +274,17 @@ const App = () => {
         </section>
 
         <hr className="card-divider" />
+
+        <label className="optin">
+          <input
+            type="checkbox"
+            checked={wantsNewsletter}
+            onChange={(event) => setWantsNewsletter(event.target.checked)}
+          />
+          <span className="optin-label">
+            Email me occasional updates about new event series (optional)
+          </span>
+        </label>
 
         <div className="form-actions">
           <button type="submit" className="register-button">

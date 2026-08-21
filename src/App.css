@@ -188,3 +188,18 @@
   border: 1px solid var(--color-error-border);
   color: var(--color-heading);
 }
+
+/*
+ * NEWSLETTER OPT-IN
+ */
+.optin {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.optin-label {
+  font-size: var(--text-base);
+  color: var(--color-muted);
+}
