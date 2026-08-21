@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import FormField from './components/FormField/FormField'
 import type { FieldChangeEvent } from './components/FormField/FormField.types'
 import type { RegistrationFormValues } from './App.types'
@@ -37,6 +37,11 @@ const App = () => {
     setValues((previous) => ({ ...previous, [name]: value }))
   }
 
+
+  const clearField = useCallback((name: string) => {
+    setValues((previous) => ({ ...previous, [name]: '' }))
+  }, [])
+
   return (
     <main className="page">
       <div className="card">
@@ -46,13 +51,8 @@ const App = () => {
           </h1>
         </header>
 
-        {/*
-          Each .form-row is one horizontal line of the form. A field decides
-          its own width through `span`, so the row itself needs no classes
-          beyond .form-row.
-        */}
+
         <div className="form-layout">
-          {/* --- Email: alone on its row, so it fills the width --- */}
           <div className="form-row">
             <FormField
               id="email"
@@ -88,11 +88,7 @@ const App = () => {
             />
           </div>
 
-          {/*
-            --- Country, plus a follow-up that depends on it ---
-            span="half" pins Country to the left half. The right half holds
-            whichever follow-up the choice calls for, or stays empty.
-          */}
+
           <div className="form-row">
             <FormField
               as="select"
@@ -118,6 +114,7 @@ const App = () => {
                 options={US_STATE_OPTIONS}
                 value={values.state}
                 onChange={handleChange}
+                onUnmount={clearField}
                 required
               />
             )}
@@ -131,11 +128,11 @@ const App = () => {
                 placeholder="Enter your answer (optional)"
                 value={values.nonUsCountry}
                 onChange={handleChange}
+                onUnmount={clearField}
               />
             )}
           </div>
 
-          {/* --- Government affiliation: half width, label wraps --- */}
           <div className="form-row">
             <FormField
               as="select"
