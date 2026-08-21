@@ -33,10 +33,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const body = (req.body ?? {}) as Record<string, unknown>
 
-  /* Re-checked fields */
-  const missing = ['email', 'first_name', 'last_name', 'country'].filter(
-    (field) => !body[field],
-  )
+  /*
+   * This list mirrors the NOT NULL columns in cw_intake.
+   */
+  const missing = [
+    'email',
+    'first_name',
+    'last_name',
+    'country',
+    'gov_org',
+  ].filter((field) => !body[field])
+
+
+  if (typeof body.newsletter !== 'boolean') {
+    missing.push('newsletter')
+  }
+
+
+  const series =
+    typeof body.workshop_series === 'string' ? body.workshop_series.trim() : ''
+
+  if (series === '' || series === '[]') {
+    missing.push('workshop_series')
+  }
 
   if (missing.length > 0) {
     return res
