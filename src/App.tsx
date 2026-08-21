@@ -16,43 +16,39 @@ import { EVENT_SERIES } from './constants/eventSeries'
 import {
   INITIAL_VALUES,
   buildRegistrationPayload,
+  getSeriesIds,
   getValidationError,
   needsGovernmentLevel,
   orderSeriesBySelection,
+  partitionSeries,
+  scrollIntoViewRespectingMotion,
   toggleInList,
 } from './App.utils'
 import './App.css'
 
 const App = () => {
-  const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
+  const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES)
   const [selectedSeries, setSelectedSeries] = useState<string[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [registeredIds, setRegisteredIds] = useState<string[]>([])
   const [wantsNewsletter, setWantsNewsletter] = useState(false)
-  const alertRef = useRef<HTMLParagraphElement>(null)
   const [errorNonce, setErrorNonce] = useState(0)
-  
+  const alertRef = useRef<HTMLParagraphElement>(null)
 
   const asksGovernmentLevel = needsGovernmentLevel(values.governmentAffiliation)
-
   const hasRegistered = registeredIds.length > 0
-
-  const registeredSeriesItems = EVENT_SERIES.filter((series) =>
-    registeredIds.includes(series.id),
-  )
-  const remainingSeries = EVENT_SERIES.filter(
-    (series) => !registeredIds.includes(series.id),
-  )
-
   const allSelected = selectedSeries.length === EVENT_SERIES.length
-  
+
+  const { registered: registeredSeriesItems, remaining: remainingSeries } =
+    partitionSeries(EVENT_SERIES, registeredIds)
+
   const toggleSeries = useCallback((id: string) => {
     setErrorMessage('')
     setSelectedSeries((previous) => toggleInList(previous, id))
   }, [])
 
   const toggleAllSeries = () => {
-    setSelectedSeries(allSelected ? [] : EVENT_SERIES.map((series) => series.id))
+    setSelectedSeries(allSelected ? [] : getSeriesIds(EVENT_SERIES))
   }
 
   const handleChange = (event: FieldChangeEvent) => {
@@ -61,26 +57,18 @@ const App = () => {
     setValues((previous) => ({ ...previous, [name]: value }))
   }
 
-
   const clearField = useCallback((name: string) => {
     setValues((previous) => ({ ...previous, [name]: '' }))
   }, [])
 
-
   /*
-   * Bring the banner into view after a failed submit.
+   * Bring the banner into view after a failed submit. errorNonce is a
+   * dependency so a repeat submit with the same message still scrolls.
    */
   useEffect(() => {
     if (!errorMessage) return
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches
-
-    alertRef.current?.scrollIntoView({
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
-      block: 'center',
-    })
+    scrollIntoViewRespectingMotion(alertRef.current)
   }, [errorNonce, errorMessage])
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -96,7 +84,6 @@ const App = () => {
       return
     }
 
-
     /* Validation passed, so state is safe to shape for the backend. */
     const payload = buildRegistrationPayload(
       values,
@@ -106,29 +93,15 @@ const App = () => {
 
     console.log('Registration payload', payload)
 
-    /*
-     * No API call yet - move straight to the success view. The series just
-     * registered are added to registeredIds, and the selection is cleared so
-     * the leftover list starts unticked.
-     */
-    /*
-     * Computed locally rather than read back from state: setRegisteredIds has
-     * not applied yet at this point, so registeredIds is still the old value.
-     */
     const nextRegisteredIds = [...registeredIds, ...selectedSeries]
 
     setRegisteredIds(nextRegisteredIds)
 
     /* Everything still on offer starts ticked, matching the reference. */
     setSelectedSeries(
-      EVENT_SERIES.filter(
-        (series) => !nextRegisteredIds.includes(series.id),
-      ).map((series) => series.id),
+      getSeriesIds(partitionSeries(EVENT_SERIES, nextRegisteredIds).remaining),
     )
   }
-
-
-
 
   return (
     <main className="page">
@@ -215,7 +188,6 @@ const App = () => {
               </p>
             )}
 
-
             <div className="form-layout">
               <div className="form-row">
                 <FormField
@@ -250,7 +222,6 @@ const App = () => {
                   required
                 />
               </div>
-
 
               <div className="form-row">
                 <FormField

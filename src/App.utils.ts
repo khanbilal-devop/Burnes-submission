@@ -109,3 +109,36 @@ export const orderSeriesBySelection = (
     .filter((item): item is EventSeries => item !== undefined),
   ...series.filter((item) => !selectedIds.includes(item.id)),
 ]
+
+export const getSeriesIds = (series: EventSeries[]) =>
+  series.map((item) => item.id)
+
+/*
+ * Split the catalogue into what has been registered and what is still on
+ * offer.
+ */
+export const partitionSeries = (
+  series: EventSeries[],
+  registeredIds: string[],
+) => ({
+  registered: series.filter((item) => registeredIds.includes(item.id)),
+  remaining: series.filter((item) => !registeredIds.includes(item.id)),
+})
+
+/*
+ * Scroll an element into view, honouring the user's motion preference.
+ */
+export const scrollIntoViewRespectingMotion = (
+  element: HTMLElement | null,
+) => {
+  if (!element) return
+
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches
+
+  element.scrollIntoView({
+    behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    block: 'center',
+  })
+}
