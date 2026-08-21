@@ -1,4 +1,4 @@
-import type { Option } from '../components/FormField/FormField.types'
+import type { Option } from '../App.types'
 
 /* Select options for the registration form. */
 
