@@ -24,6 +24,10 @@ const INITIAL_VALUES: RegistrationFormValues = {
   governmentLevel: '',
 }
 
+const isBlank = (value: string) => value.trim().length === 0
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 const UNITED_STATES = 'United States'
 const OUTSIDE_UNITED_STATES = 'Outside the United States'
 const NO_GOVERNMENT_AFFILIATION =
@@ -32,7 +36,7 @@ const NO_GOVERNMENT_AFFILIATION =
 const App = () => {
   const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
   const [selectedSeries, setSelectedSeries] = useState<string[]>([])
-  const [errorMessage, setErrorMessage] = useState<string>("string");
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   
 
@@ -69,12 +73,59 @@ const App = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+     setErrorMessage('')
+    if (checkForErrors()) return
+    setIsFormSubmitted(true)
     console.log('Registration payload', { ...values, selectedSeries })
+    setIsFormSubmitted(false)
   }
+
+  const checkForErrors = () => {
+
+    if (selectedSeries.length === 0) {
+      setErrorMessage('Please select at least one event series to register for.')
+      return true
+    }
+
+    if (isBlank(values.email) || isBlank(values.firstName) || isBlank(values.lastName)) {
+      setErrorMessage('Please fill in all required fields (Email, First Name, Last Name).')
+      return true
+    }
+
+    if (!EMAIL_PATTERN.test(values.email.trim())) {
+      setErrorMessage('Please enter a valid email address.')
+      return true
+    }
+
+    if (isBlank(values.country)) {
+      setErrorMessage('Country is required.')
+      return true
+    }
+
+    /* State only exists while the country is the US. */
+    if (values.country === UNITED_STATES && isBlank(values.state)) {
+      setErrorMessage('State/Province is required.')
+      return true
+    }
+
+    if (isBlank(values.governmentAffiliation)) {
+      setErrorMessage('Please tell us about your government affiliation.')
+      return true
+    }
+
+    /* Same conditional as the field itself, so the two cannot drift apart. */
+    if (asksGovernmentLevel && isBlank(values.governmentLevel)) {
+      setErrorMessage('Please select your level of government.')
+      return true
+    }
+
+    return false
+  }
+
 
   return (
     <main className="page">
-      <form className="card" onSubmit={handleSubmit}>
+      <form className="card" onSubmit={handleSubmit} noValidate>
         <header>
           <h1 id="registration-heading" className="card-heading">
             Registration Details
