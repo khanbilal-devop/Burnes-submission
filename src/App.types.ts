@@ -4,6 +4,12 @@ export type Option = {
   label: string
 }
 
+export type EventSeries = {
+  id: string
+  title: string
+  imageUrl: string
+}
+
 /* The shape of the registration form's state. */
 export type RegistrationFormValues = {
   email: string

@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import FormField from './components/FormField/FormField'
+import SeriesItem from './components/SeriesItem/SeriesItem'
 import type { FieldChangeEvent } from './components/FormField/FormField.types'
 import type { RegistrationFormValues } from './App.types'
 import {
@@ -8,6 +9,7 @@ import {
   GOVERNMENT_OPTIONS,
   US_STATE_OPTIONS,
 } from './constants/formOptions'
+import { EVENT_SERIES } from './constants/eventSeries'
 import './App.css'
 
 const INITIAL_VALUES: RegistrationFormValues = {
@@ -28,7 +30,9 @@ const NO_GOVERNMENT_AFFILIATION =
 
 const App = () => {
   const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
+  const [selectedSeries, setSelectedSeries] = useState<string[]>([]);
 
+  console.log(selectedSeries);
   const asksGovernmentLevel =
     values.governmentAffiliation !== '' &&
     values.governmentAffiliation !== NO_GOVERNMENT_AFFILIATION
@@ -51,11 +55,26 @@ const App = () => {
 
 
 
+  /* Add the id if it is missing, drop it if it is already there. */
+  const toggleSeries = useCallback((id: string) => {
+    setSelectedSeries((previous) =>
+      previous.includes(id)
+        ? previous.filter((seriesId) => seriesId !== id)
+        : [...previous, id],
+    )
+  }, [])
+
+  const allSelected = selectedSeries.length === EVENT_SERIES.length
+
+  const toggleAllSeries = () => {
+    setSelectedSeries(allSelected ? [] : EVENT_SERIES.map((series) => series.id))
+  }
+
   return (
     <main className="page">
       <div className="card">
         <header>
-          <h1 id="registration-heading" className="card__heading">
+          <h1 id="registration-heading" className="card-heading">
             Registration Details
           </h1>
         </header>
@@ -174,7 +193,49 @@ const App = () => {
           </div>
         </div>
 
-        <hr className="card__divider" />
+        <hr className="card-divider" />
+
+        <section className="series" aria-labelledby="series-heading">
+          <div className="series-header">
+            <h2 id="series-heading" className="series-title">
+              Selected Event Series
+            </h2>
+
+            <p className="series-count">
+              You are registering for <strong>{selectedSeries.length}</strong>{' '}
+              event series.
+            </p>
+          </div>
+
+          <div className="series-actions">
+            <button
+              type="button"
+              className="series-select-all"
+              onClick={toggleAllSeries}
+            >
+              {allSelected ? 'Unselect all series' : 'Select all series'}
+            </button>
+
+            {selectedSeries.length === 0 && (
+              <span className="series-hint">
+                Select at least one series to continue.
+              </span>
+            )}
+          </div>
+
+          <div className="series-list">
+            {EVENT_SERIES.map((series) => (
+              <SeriesItem
+                key={series.id}
+                id={series.id}
+                title={series.title}
+                imageUrl={series.imageUrl}
+                checked={selectedSeries.includes(series.id)}
+                onToggle={toggleSeries}
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </main>
   )
