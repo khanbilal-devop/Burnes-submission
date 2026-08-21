@@ -2,11 +2,50 @@
  * FORM FIELD
  * One label + one control, stacked. Used for both the input and the select
  * variant - the wrapper is identical, which is why they share a component.
+ *
+ * This element does two jobs: it stacks the label above the control, and it
+ * acts as the flex item inside .form-row. Keeping both here means a field is
+ * one div rather than two nested ones.
  */
 .field {
+  /* Job 1: stack label above control */
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+
+  /*
+   * Job 2: share the row. One field in a row -> 100%. Two -> 50% each.
+   * The basis doubles as the wrap threshold: below 14rem the field drops onto
+   * its own line rather than getting crushed.
+   */
+  flex: 1 1 var(--field-min-inline-size);
+
+  /*
+   * Flex items default to min-inline-size: auto and refuse to shrink below
+   * their content. A <select> takes that from its longest <option>, so one
+   * long option would push the row past the card. Zero lets the basis win.
+   */
+  min-inline-size: 0;
+}
+
+/*
+ * Take exactly half the row and leave the rest empty. Subtracting half the gap
+ * lines it up with a field from a two-column row: 360px in a 736px card.
+ */
+.field--half {
+  flex: 0 1 calc(50% - var(--space-4) / 2);
+}
+
+/*
+ * Below 36rem there is no room for half a field, so it takes the whole row.
+ * The one spot a query is genuinely needed: flex alone cannot say "half on
+ * desktop, full on mobile" for a lone item, because the item must not grow
+ * when it does have a neighbour.
+ */
+@media (width < 36rem) {
+  .field--half {
+    flex-basis: 100%;
+  }
 }
 
 .field__label {

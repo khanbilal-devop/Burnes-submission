@@ -10,9 +10,9 @@ export type RegistrationFormValues = {
   firstName: string
   lastName: string
   country: string
-  /* Shown only when country is 'us'. */
+  /* Shown only when country is 'United States'. */
   state: string
-  /* Shown only when country is 'outside-us'. */
+  /* Shown only when country is 'Outside the United States'. */
   nonUsCountry: string
   governmentAffiliation: string
 }

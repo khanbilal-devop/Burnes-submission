@@ -10,11 +10,14 @@ const FormField = (props: FormFieldProps) => {
     onChange,
     required = false,
     placeholder,
+    span = 'full',
     as,
   } = props
 
+  const className = span === 'half' ? 'field field--half' : 'field'
+
   return (
-    <div className="field">
+    <div className={className}>
       <label className="field__label" htmlFor={id}>
         {label}
         {required && (

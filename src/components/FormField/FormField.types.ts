@@ -10,6 +10,7 @@ type BaseProps = {
   label: string
   value: string
   onChange: (event: FieldChangeEvent) => void
+  span?: 'full' | 'half'
   required?: boolean
   placeholder?: string
 }
