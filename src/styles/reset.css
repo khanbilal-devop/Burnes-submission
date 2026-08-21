@@ -39,6 +39,14 @@ select {
   box-shadow: var(--ring-focus);
 }
 
+input[type='checkbox'] {
+  flex-shrink: 0;
+  inline-size: var(--checkbox-size);
+  block-size: var(--checkbox-size);
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
 /* Nicer line breaking for free */
 h1,
 h2,
