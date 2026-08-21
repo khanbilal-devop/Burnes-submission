@@ -35,4 +35,6 @@ export type RegistrationPayload = {
   gov_org: string
   gov_level: string | null
   state: string | null
+  newsletter: boolean
+  consent_at: string | null
 }

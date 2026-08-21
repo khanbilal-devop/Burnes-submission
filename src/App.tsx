@@ -87,7 +87,7 @@ const App = () => {
 
 
     /* Validation passed, so state is safe to shape for the backend. */
-    const payload = buildRegistrationPayload(values)
+    const payload = buildRegistrationPayload(values, wantsNewsletter)
 
     console.log('Registration payload', payload)
   }

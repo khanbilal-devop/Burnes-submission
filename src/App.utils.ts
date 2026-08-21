@@ -77,6 +77,8 @@ export const getValidationError = (
 
 export const buildRegistrationPayload = (
   values: RegistrationFormValues,
+  wantsNewsletter: boolean,
+  consentedAt: string = new Date().toISOString(),
 ): RegistrationPayload => ({
   email: values.email.trim(),
   first_name: values.firstName.trim(),
@@ -87,4 +89,6 @@ export const buildRegistrationPayload = (
     ? values.governmentLevel
     : null,
   state: values.country === UNITED_STATES ? values.state : null,
+  newsletter: wantsNewsletter,
+  consent_at: wantsNewsletter ? consentedAt : null,
 });
