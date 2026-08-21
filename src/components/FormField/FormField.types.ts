@@ -1,11 +1,10 @@
 
 
-type Option = {
+export type Option = {
   value: string
   label: string
 }
 
-/* Shared by both variants: everything in the wrapper around the control. */
 type BaseProps = {
   id: string
   label: string

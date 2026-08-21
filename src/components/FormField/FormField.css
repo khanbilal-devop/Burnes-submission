@@ -17,6 +17,8 @@
 }
 
 .field__required {
+  /* margin rather than a JSX space, so the gap is a styling decision */
+  margin-inline-start: var(--space-1);
   color: var(--color-required);
 }
 
