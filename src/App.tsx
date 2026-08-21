@@ -236,6 +236,8 @@ const App = () => {
             ))}
           </div>
         </section>
+
+        <hr className="card-divider" />
       </div>
     </main>
   )
