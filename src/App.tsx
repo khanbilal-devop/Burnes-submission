@@ -5,6 +5,7 @@ import type { RegistrationFormValues } from './App.types'
 import {
   COUNTRY_OPTIONS,
   GOVERNMENT_OPTIONS,
+  US_STATE_OPTIONS,
 } from './constants/formOptions'
 import './App.css'
 
@@ -13,6 +14,8 @@ const INITIAL_VALUES: RegistrationFormValues = {
   firstName: '',
   lastName: '',
   country: '',
+  state: '',
+  nonUsCountry: '',
   governmentAffiliation: '',
 }
 
@@ -26,7 +29,17 @@ const App = () => {
    */
   const handleChange = (event: FieldChangeEvent) => {
     const { name, value } = event.target
-    setValues((previous) => ({ ...previous, [name]: value }))
+
+    setValues((previous) => ({
+      ...previous,
+      [name]: value,
+      // /*
+      //  * Country decides which follow-up field is shown. Clear both whenever it
+      //  * changes, so a value entered under one country cannot survive into the
+      //  * other and get submitted invisibly.
+      //  */
+      // ...(name === 'country' ? { stateProvince: '', nonUsCountry: '' } : {}),
+    }))
   }
 
   return (
@@ -94,6 +107,32 @@ const App = () => {
                 required
               />
             </div>
+
+            {/* The other half of this row depends on the chosen country */}
+            {values.country  &&  values.country === 'United States' ? 
+             <div className="form-field form-field--half">
+                <FormField
+                  as="select"
+                  id="state-province"
+                  name="stateProvince"
+                  label="State/Province"
+                  placeholder="Select state (required)"
+                  options={US_STATE_OPTIONS}
+                  value={values.state}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            : <div className="form-field form-field--half">
+                <FormField
+                  id="non-us-country"
+                  name="nonUsCountry"
+                  label="Country (Non US only)"
+                  placeholder="Enter your answer (optional)"
+                  value={values.nonUsCountry}
+                  onChange={handleChange}
+                />
+              </div>}
           </div>
 
           {/* Same half-width treatment, with a label that wraps */}
