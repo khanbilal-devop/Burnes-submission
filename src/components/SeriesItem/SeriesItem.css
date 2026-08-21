@@ -1,0 +1,45 @@
+/*
+ * SERIES ITEM
+ * A full-width clickable row. The original wraps a <label> in an extra <div>
+ * to carry the padding and hover; both live on the label here, so a row is
+ * one element.
+ */
+.series-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.series-item:hover {
+  background-color: var(--color-row-hover);
+}
+
+/* flex-shrink: 0 keeps the box square when a long title squeezes the row. */
+.series-item-checkbox {
+  flex-shrink: 0;
+  inline-size: var(--checkbox-size);
+  block-size: var(--checkbox-size);
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.series-item-icon {
+  flex-shrink: 0;
+  inline-size: var(--series-icon-size);
+  block-size: var(--series-icon-size);
+  object-fit: cover;
+  border: 1px solid var(--color-icon-border);
+  border-radius: var(--radius-sm);
+}
+
+.series-item-title {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-relaxed);
+  color: var(--color-body);
+}
