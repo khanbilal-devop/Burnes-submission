@@ -179,6 +179,8 @@
 .alert {
   padding: var(--space-4);
   border-radius: var(--radius-xs);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
 }
 
 .alert-error {
