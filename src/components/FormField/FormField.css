@@ -32,7 +32,7 @@
  * Take exactly half the row and leave the rest empty. Subtracting half the gap
  * lines it up with a field from a two-column row: 360px in a 736px card.
  */
-.field--half {
+.field-half {
   flex: 0 1 calc(50% - var(--space-4) / 2);
 }
 
@@ -43,19 +43,19 @@
  * when it does have a neighbour.
  */
 @media (width < 36rem) {
-  .field--half {
+  .field-half {
     flex-basis: 100%;
   }
 }
 
-.field__label {
+.field-label {
   font-size: var(--text-base);
   font-weight: var(--weight-bold);
   line-height: var(--leading-tight);
   color: var(--color-text);
 }
 
-.field__required {
+.field-required {
   /* margin rather than a JSX space, so the gap is a styling decision */
   margin-inline-start: var(--space-1);
   color: var(--color-required);
@@ -66,7 +66,7 @@
  * vertical padding keeps the two controls exactly the same height, which the
  * reference does not quite manage (48.5px vs 50px).
  */
-.field__control {
+.field-control {
   margin-block-start: auto;
 
   block-size: var(--field-block-size);
@@ -81,15 +81,11 @@
 }
 
 /*
- * :focus-visible rather than :focus, so the ring appears for keyboard users
- * but not on a mouse click.
- */
-/*
  * Browser default is a mid-grey at normal weight. The reference uses a lighter
  * colour at semibold - that heavier weight is what makes its placeholders read
  * as noticeably chunkier than a plain one.
  */
-.field__control::placeholder {
+.field-control::placeholder {
   color: var(--color-placeholder);
   font-weight: var(--weight-semibold);
   opacity: 1; /* Firefox dims placeholders by default */
@@ -100,7 +96,7 @@
  * appearance: none removes the OS control, so the arrow has to be drawn back
  * in as a background image, and the text needs room not to run under it.
  */
-.field__control:is(select) {
+.field-control:is(select) {
   appearance: none;
   cursor: pointer;
 
@@ -111,8 +107,6 @@
   padding-inline-end: var(--space-10);
 }
 
-.field__control:focus-visible {
-  outline: none;
+.field-control:focus-visible {
   border-color: var(--color-primary);
-  box-shadow: var(--ring-focus);
 }
