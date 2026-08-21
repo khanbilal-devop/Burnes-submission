@@ -33,6 +33,12 @@ select {
   color: inherit;
 }
 
+
+:where(input, button, textarea, select):focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus);
+}
+
 /* Nicer line breaking for free */
 h1,
 h2,
