@@ -18,6 +18,11 @@
   --color-primary-hover: #0052a3;
   --color-on-primary: #ffffff; 
   --color-help: #666666;
+  --color-success-bg: #d4edda;
+  --color-success-border: #c3e6cb;
+  --color-success-text: #155724;
+  --color-row-tint: #f7fafc;
+  --color-row-tint-hover: #edf2f7;
   --color-error-bg: #ffeeee;
   --color-error-border: #ffcccc; 
   --color-required: #dc3545; 
@@ -40,6 +45,7 @@
   --text-base: 1rem; /* 16px */
 
   --text-lg: 1.1rem; /* 17.6px */
+  --text-xl: 1.25rem; /* 20px */
   --text-2xl: 1.75rem; /* 28px */
 
   --weight-regular: 400;
@@ -58,6 +64,7 @@
   --space-2: 0.5rem; /* 8px */
   --space-3: 0.75rem; /* 12px */
   --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
   --space-6: 1.5rem; /* 24px */
   --space-8: 2rem; /* 32px */
   --space-10: 2.5rem; /* 40px */
@@ -73,6 +80,7 @@
   --field-block-size: 3rem; /* 48px */
   --field-min-inline-size: 14rem;
   --series-icon-size: 3rem; /* 48px */
+  --icon-size-sm: 2.5rem; /* 40px */ /* 48px */
   --checkbox-size: 1.25rem; /* 20px */ /* 224px */
   --field-padding-inline: 0.875rem; /* 14px */
 
