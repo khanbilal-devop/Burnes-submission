@@ -17,7 +17,9 @@
   --color-primary: #0066cc;
   --color-primary-hover: #0052a3;
   --color-on-primary: #ffffff; 
-  --color-help: #666666; 
+  --color-help: #666666;
+  --color-error-bg: #ffeeee;
+  --color-error-border: #ffcccc; 
   --color-required: #dc3545; 
   --color-control-text: #2d3748;
   --color-body: #1a1a1a; 

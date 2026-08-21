@@ -31,7 +31,9 @@ const NO_GOVERNMENT_AFFILIATION =
 
 const App = () => {
   const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
-  const [selectedSeries, setSelectedSeries] = useState<string[]>([]);
+  const [selectedSeries, setSelectedSeries] = useState<string[]>([])
+  const [errorMessage, setErrorMessage] = useState<string>("string");
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   
 
   const asksGovernmentLevel =
@@ -56,8 +58,8 @@ const App = () => {
 
 
 
-  /* Add the id if it is missing, drop it if it is already there. */
   const toggleSeries = useCallback((id: string) => {
+    setErrorMessage('')
     setSelectedSeries((previous) =>
       previous.includes(id)
         ? previous.filter((seriesId) => seriesId !== id)
@@ -72,7 +74,6 @@ const App = () => {
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    console.log('clicked submit')
     event.preventDefault()
     console.log('Registration payload', { ...values, selectedSeries })
   }
@@ -85,6 +86,12 @@ const App = () => {
             Registration Details
           </h1>
         </header>
+
+        {errorMessage && (
+          <p className="alert alert-error" role="alert">
+            {errorMessage}
+          </p>
+        )}
 
 
         <div className="form-layout">
@@ -249,7 +256,7 @@ const App = () => {
           <button
             type="submit"
             className="register-button"
-            disabled={false}
+            disabled={isFormSubmitted}
           >
             Register
           </button>
