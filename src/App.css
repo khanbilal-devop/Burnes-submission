@@ -55,6 +55,9 @@
  */
 .form-row > .form-field {
   flex: 1 1 var(--field-min-inline-size);
+
+
+  min-inline-size: 0;
 }
 
 /*

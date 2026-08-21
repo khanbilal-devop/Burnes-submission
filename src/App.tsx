@@ -1,12 +1,9 @@
 import FormField from './components/FormField/FormField'
-import type { Option } from './components/FormField/FormField.types'
+import {
+  COUNTRY_OPTIONS,
+  GOVERNMENT_OPTIONS,
+} from './constants/formOptions'
 import './App.css'
-
-/* Dummy options until the real data is wired up. */
-const COUNTRY_OPTIONS: Option[] = [
-  { value: 'us', label: 'United States' },
-  { value: 'outside-us', label: 'Outside the United States' },
-]
 
 const App = () => {
   return (
@@ -19,7 +16,7 @@ const App = () => {
         </header>
 
         <div className="form-layout">
-          {/* Input variant, full width */}
+          {/* Email spans the full width */}
           <div className="form-row">
             <div className="form-field">
               <FormField
@@ -32,15 +29,47 @@ const App = () => {
             </div>
           </div>
 
-          {/* Select variant, full width */}
           <div className="form-row">
             <div className="form-field">
+              <FormField
+                id="first-name"
+                label="First Name"
+                placeholder="John"
+                required
+              />
+            </div>
+            <div className="form-field">
+              <FormField
+                id="last-name"
+                label="Last Name"
+                placeholder="Doe"
+                required
+              />
+            </div>
+            
+          </div>
+
+          <div className="form-row">
+            <div className="form-field form-field--half">
               <FormField
                 as="select"
                 id="country"
                 label="Country"
                 placeholder="Select country (required)"
                 options={COUNTRY_OPTIONS}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-field form-field--half">
+              <FormField
+                as="select"
+                id="government-affiliation"
+                label="Do you work for or primarily support a government or government-affiliated organization?"
+                placeholder="Select"
+                options={GOVERNMENT_OPTIONS}
                 required
               />
             </div>
