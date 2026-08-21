@@ -1,3 +1,4 @@
+import { useClearOnUnmount } from '../../hooks/useClearOnUnmount'
 import './FormField.css'
 import type { FormFieldProps } from './FormField.types'
 
@@ -10,9 +11,12 @@ const FormField = (props: FormFieldProps) => {
     onChange,
     required = false,
     placeholder,
+    onUnmount,
     span = 'full',
     as,
   } = props
+
+  useClearOnUnmount(name, onUnmount)
 
   const className = span === 'half' ? 'field field--half' : 'field'
 
