@@ -203,3 +203,100 @@
   font-size: var(--text-base);
   color: var(--color-muted);
 }
+
+/*
+ * The success phase is not in a card - it sits on the page background. Only
+ * the width cap is shared with .card; the surface, padding and shadow are not.
+ */
+.success-shell {
+  inline-size: min(100%, var(--card-max-inline-size));
+}
+
+/*
+ * SUCCESS PHASE
+ * Shown after a submit succeeds: a confirmation, the series just registered,
+ * then whatever is left to choose from.
+ */
+.success {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.success-box {
+  padding: var(--space-5) var(--space-6);
+  text-align: center;
+  background-color: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  border-radius: var(--radius-md);
+}
+
+.success-text {
+  font-weight: var(--weight-medium);
+  color: var(--color-success-text);
+}
+
+/* One dark card per registered series. */
+.success-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.success-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+
+  padding: var(--space-5) var(--space-6);
+  background-color: var(--color-text);
+  border-radius: var(--radius-md);
+}
+
+.success-card-icon {
+  flex-shrink: 0;
+  inline-size: var(--icon-size-sm);
+  block-size: var(--icon-size-sm);
+  object-fit: cover;
+  border-radius: var(--radius-xs);
+}
+
+.success-card-title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  color: var(--color-on-primary);
+}
+
+/* The leftovers, offered as a second chance to sign up. */
+.other-series {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.other-series-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+}
+
+.other-series-description {
+  color: var(--color-muted);
+}
+
+/*
+ * Reuses SeriesItem rather than a second component: only the surface differs,
+ * so the parent class restyles the rows in place.
+ */
+.other-series-list .series-item {
+  text-align: start;
+  background-color: var(--color-row-tint);
+  border: 1px solid var(--color-border);
+}
+
+.other-series-list .series-item:hover {
+  background-color: var(--color-row-tint-hover);
+}
