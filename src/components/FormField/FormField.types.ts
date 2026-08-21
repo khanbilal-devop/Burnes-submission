@@ -10,11 +10,6 @@ type BaseProps = {
   label: string
   value: string
   onChange: (event: FieldChangeEvent) => void
-  /*
-   * Called with this field's `name` when it unmounts. Optional: only the
-   * fields that can disappear need to clean up after themselves.
-   */
-  onUnmount?: (name: string) => void
   span?: 'full' | 'half'
   required?: boolean
   placeholder?: string

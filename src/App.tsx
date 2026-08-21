@@ -70,10 +70,6 @@ const App = () => {
     setValues((previous) => ({ ...previous, [name]: value }))
   }
 
-  const clearField = useCallback((name: string) => {
-    setValues((previous) => ({ ...previous, [name]: '' }))
-  }, [])
-
   /*
    * Bring the banner into view after a failed submit. errorNonce is a
    * dependency so a repeat submit with the same message still scrolls.
@@ -281,8 +277,7 @@ const App = () => {
                     options={US_STATE_OPTIONS}
                     value={values.state}
                     onChange={handleChange}
-                    onUnmount={clearField}
-                    required
+                        required
                   />
                 )}
 
@@ -295,8 +290,7 @@ const App = () => {
                     placeholder="Enter your answer (optional)"
                     value={values.nonUsCountry}
                     onChange={handleChange}
-                    onUnmount={clearField}
-                  />
+                      />
                 )}
               </div>
 
@@ -325,8 +319,7 @@ const App = () => {
                     options={GOVERNMENT_LEVEL_OPTIONS}
                     value={values.governmentLevel}
                     onChange={handleChange}
-                    onUnmount={clearField}
-                    required
+                        required
                   />
                 )}
               </div>
