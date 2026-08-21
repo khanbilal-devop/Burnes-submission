@@ -3,7 +3,11 @@ import type {
   RegistrationFormValues,
   RegistrationPayload,
 } from './App.types'
-import { UNITED_STATES,NO_GOVERNMENT_AFFILIATION } from './constants/formOptions'
+import {
+  UNITED_STATES,
+  OUTSIDE_UNITED_STATES,
+  NO_GOVERNMENT_AFFILIATION,
+} from './constants/formOptions'
 
 export const INITIAL_VALUES: RegistrationFormValues = {
   email: '',
@@ -88,7 +92,10 @@ export const buildRegistrationPayload = (
   email: values.email.trim().toLowerCase(),
   first_name: values.firstName.trim(),
   last_name: values.lastName.trim(),
-  country: values.country,
+  country:
+    values.country === OUTSIDE_UNITED_STATES && !isBlank(values.nonUsCountry)
+      ? values.nonUsCountry.trim()
+      : values.country,
   gov_org: values.governmentAffiliation,
   gov_level: needsGovernmentLevel(values.governmentAffiliation)
     ? values.governmentLevel
