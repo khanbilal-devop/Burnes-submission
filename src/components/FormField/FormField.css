@@ -1,0 +1,48 @@
+/*
+ * FORM FIELD
+ * One label + one control, stacked. Used for both the input and the select
+ * variant - the wrapper is identical, which is why they share a component.
+ */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.field__label {
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+}
+
+.field__required {
+  color: var(--color-required);
+}
+
+/*
+ * Both <input> and <select> share this rule. Setting block-size rather than
+ * vertical padding keeps the two controls exactly the same height, which the
+ * reference does not quite manage (48.5px vs 50px).
+ */
+.field__control {
+  block-size: var(--field-block-size);
+  padding-inline: var(--field-padding-inline);
+
+  font-size: var(--text-base);
+  color: var(--color-control-text);
+  background-color: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+/*
+ * :focus-visible rather than :focus, so the ring appears for keyboard users
+ * but not on a mouse click.
+ */
+.field__control:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--ring-focus);
+}
