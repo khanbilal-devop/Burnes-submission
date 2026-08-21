@@ -12,6 +12,7 @@
   padding: var(--space-3);
   border-radius: var(--radius-sm);
   cursor: pointer;
+  overflow-anchor: none;
   transition: background-color 0.2s;
 }
 
