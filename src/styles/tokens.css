@@ -16,25 +16,42 @@
   --color-border: #e2e8f0; /* field borders + section dividers */
   --color-primary: #0066cc; /* focus ring + primary actions */
   --color-required: #dc3545; /* the * on required labels */
-  --color-control-text: #2d3748; /* text typed into a field */
+  --color-control-text: #2d3748;
+  --color-body: #1a1a1a; /* serif section titles */
+  --color-muted: #555555; /* supporting copy and hints */
+  --color-tint: #e8f0ff; /* tinted callout panel */
+  --color-tint-border: #c7d7ff;
+  --color-icon-border: #e0e0e0; /* series thumbnail outline */
+  --color-row-hover: #f8f9fa; /* series row hover */ /* button border on the tint */ /* text typed into a field */
 
   /* ---------- Typography ---------- */
+  /* Section titles use a serif face; everything else is the sans. */
+  --font-serif: 'DM Serif Text', Georgia, serif;
+
   --font-sans: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
 
   --text-xs: 0.8125rem; /* 13px */
+  --text-sm: 0.875rem; /* 14px */
   --text-base: 1rem; /* 16px */
 
+  --text-2xl: 1.75rem; /* 28px */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
 
   --leading-tight: 1.25;
+  --leading-relaxed: 1.5;
   --leading-normal: 1.6;
+  --tracking-narrow: 0.017em; /* 0.24px at 14px */
   --tracking-wide: 0.03em;
 
   /* ---------- Spacing (4px scale) ---------- */
   --space-1: 0.25rem; /* 4px */
   --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
   --space-4: 1rem; /* 16px */
   --space-6: 1.5rem; /* 24px */
   --space-8: 2rem; /* 32px */
@@ -49,7 +66,9 @@
   /* A field's natural height, and the width below which it wraps onto
    * its own line instead of being squeezed. */
   --field-block-size: 3rem; /* 48px */
-  --field-min-inline-size: 14rem; /* 224px */
+  --field-min-inline-size: 14rem;
+  --series-icon-size: 3rem; /* 48px */
+  --checkbox-size: 1.25rem; /* 20px */ /* 224px */
   --field-padding-inline: 0.875rem; /* 14px */
 
   /* ---------- Radius & elevation ---------- */
@@ -60,6 +79,7 @@
    */
   --field-arrow-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9 1 4h10z'/%3E%3C/svg%3E");
 
+  --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 12px;
   --shadow-card: 0 2px 8px rgb(0 0 0 / 0.1);
