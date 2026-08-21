@@ -14,6 +14,9 @@
   --color-body: #1a1a1a; 
   --color-heading: #124d8f;
   --color-border: #e2e8f0; /* field borders + section dividers */
+  --color-primary: #0066cc; /* focus ring + primary actions */
+  --color-required: #dc3545; /* the * on required labels */
+  --color-control-text: #2d3748; /* text typed into a field */
 
   /* ---------- Typography ---------- */
   --font-sans: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -44,9 +47,11 @@
    * its own line instead of being squeezed. */
   --field-block-size: 3rem; /* 48px */
   --field-min-inline-size: 14rem; /* 224px */
+  --field-padding-inline: 0.875rem; /* 14px */
 
   /* ---------- Radius & elevation ---------- */
   --radius-sm: 6px;
   --radius-md: 12px;
   --shadow-card: 0 2px 8px rgb(0 0 0 / 0.1);
+  --ring-focus: 0 0 0 3px rgb(0 102 204 / 0.25);
 }
