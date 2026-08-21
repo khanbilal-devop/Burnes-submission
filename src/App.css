@@ -117,3 +117,60 @@
   border-radius: var(--radius-xs);
   cursor: pointer;
 }
+
+/*
+ * SUBMIT
+ * The action sits centred on its own line, with the fine print beneath.
+ */
+.form-actions {
+  display: flex;
+  justify-content: center;
+  padding-block-start: var(--space-6);
+}
+
+.register-button {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  /* Inherited 1.6 would make the button 50px; 1.5 lands it on 48. */
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-on-primary);
+
+  padding: var(--space-3) var(--space-6);
+  background-color: var(--color-primary);
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+
+/* :not(:disabled) so the lift does not happen while the button is unusable. */
+.register-button:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-primary);
+  transform: translateY(-1px);
+}
+
+.register-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.registration-help {
+  font-size: var(--text-xxs);
+  text-align: center;
+  color: var(--color-help);
+}
+
+.registration-help a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.registration-help a:hover {
+  text-decoration: underline;
+}

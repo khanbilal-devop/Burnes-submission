@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import type { FormEvent } from 'react'
 import FormField from './components/FormField/FormField'
 import SeriesItem from './components/SeriesItem/SeriesItem'
 import type { FieldChangeEvent } from './components/FormField/FormField.types'
@@ -31,8 +32,8 @@ const NO_GOVERNMENT_AFFILIATION =
 const App = () => {
   const [values, setValues] = useState<RegistrationFormValues>(INITIAL_VALUES);
   const [selectedSeries, setSelectedSeries] = useState<string[]>([]);
+  
 
-  console.log(selectedSeries);
   const asksGovernmentLevel =
     values.governmentAffiliation !== '' &&
     values.governmentAffiliation !== NO_GOVERNMENT_AFFILIATION
@@ -70,9 +71,15 @@ const App = () => {
     setSelectedSeries(allSelected ? [] : EVENT_SERIES.map((series) => series.id))
   }
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    console.log('clicked submit')
+    event.preventDefault()
+    console.log('Registration payload', { ...values, selectedSeries })
+  }
+
   return (
     <main className="page">
-      <div className="card">
+      <form className="card" onSubmit={handleSubmit}>
         <header>
           <h1 id="registration-heading" className="card-heading">
             Registration Details
@@ -94,7 +101,6 @@ const App = () => {
             />
           </div>
 
-          {/* --- Names: two fields on one row, so they split it 50/50 --- */}
           <div className="form-row">
             <FormField
               id="first-name"
@@ -238,7 +244,22 @@ const App = () => {
         </section>
 
         <hr className="card-divider" />
-      </div>
+
+        <div className="form-actions">
+          <button
+            type="submit"
+            className="register-button"
+            disabled={false}
+          >
+            Register
+          </button>
+        </div>
+
+        <p className="registration-help">
+          Having trouble registering? Contact us at{' '}
+          <a href="mailto:hello@innovate-us.org">hello [at] innovate-us.org</a>
+        </p>
+      </form>
     </main>
   )
 }
