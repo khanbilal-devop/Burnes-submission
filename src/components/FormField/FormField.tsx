@@ -38,7 +38,6 @@ const FormField = (props: FormFieldProps) => {
           className="field-control"
           value={value}
           onChange={onChange}
-          required={required}
         >
           <option value="">{placeholder ?? 'Select'}</option>
           {props.options.map((option) => (
@@ -56,7 +55,6 @@ const FormField = (props: FormFieldProps) => {
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          required={required}
         />
       )}
     </div>
