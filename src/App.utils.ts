@@ -23,15 +23,11 @@ export const INITIAL_VALUES: RegistrationFormValues = {
 /* Treats whitespace-only input as empty, so " " does not pass as a name. */
 export const isBlank = (value: string) => value.trim().length === 0
 
-/*
- * Dot-free chunks joined by single dots on each side of the @, so a trailing
- * dot or an empty label like x..com cannot pass.
- */
+
 const EMAIL_PATTERN = /^[^\s@.]+(\.[^\s@.]+)*@[^\s@.]+(\.[^\s@.]+)+$/
 
-/* Letters, spaces and name punctuation only - no digits. Both apostrophe forms,
- * since phones substitute the curly one. */
-const COUNTRY_NAME_PATTERN = /^[\p{L}\s'’.-]+$/u
+
+const NAME_PATTERN = /^[\p{L}\s'’.-]+$/u
 
 /*
  * The government-level question only applies to the three "Yes" answers.
@@ -67,6 +63,13 @@ export const getValidationError = (
     return 'Please enter a valid email address.'
   }
 
+  if (
+    !NAME_PATTERN.test(values.firstName.trim()) ||
+    !NAME_PATTERN.test(values.lastName.trim())
+  ) {
+    return 'Names cannot contain numbers or symbols.'
+  }
+
   if (isBlank(values.country)) {
     return 'Country is required.'
   }
@@ -79,7 +82,7 @@ export const getValidationError = (
   if (
     values.country === OUTSIDE_UNITED_STATES &&
     !isBlank(values.nonUsCountry) &&
-    !COUNTRY_NAME_PATTERN.test(values.nonUsCountry.trim())
+    !NAME_PATTERN.test(values.nonUsCountry.trim())
   ) {
     return 'Please enter a country name without numbers or symbols.'
   }
