@@ -40,11 +40,21 @@ const App = () => {
     values.governmentAffiliation !== '' &&
     values.governmentAffiliation !== NO_GOVERNMENT_AFFILIATION
 
-  /*
-   * One handler for every field. Each control carries its own `name`, which
-   * doubles as the key in the state object, so adding a field needs no new
-   * handler.
-   */
+  const allSelected = selectedSeries.length === EVENT_SERIES.length
+  
+  const toggleSeries = useCallback((id: string) => {
+    setErrorMessage('')
+    setSelectedSeries((previous) =>
+      previous.includes(id)
+        ? previous.filter((seriesId) => seriesId !== id)
+        : [...previous, id],
+    )
+  }, [])
+
+  const toggleAllSeries = () => {
+    setSelectedSeries(allSelected ? [] : EVENT_SERIES.map((series) => series.id))
+  }
+
   const handleChange = (event: FieldChangeEvent) => {
     const { name, value } = event.target
 
@@ -56,22 +66,6 @@ const App = () => {
     setValues((previous) => ({ ...previous, [name]: '' }))
   }, [])
 
-
-
-  const toggleSeries = useCallback((id: string) => {
-    setErrorMessage('')
-    setSelectedSeries((previous) =>
-      previous.includes(id)
-        ? previous.filter((seriesId) => seriesId !== id)
-        : [...previous, id],
-    )
-  }, [])
-
-  const allSelected = selectedSeries.length === EVENT_SERIES.length
-
-  const toggleAllSeries = () => {
-    setSelectedSeries(allSelected ? [] : EVENT_SERIES.map((series) => series.id))
-  }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
